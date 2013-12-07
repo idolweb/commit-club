@@ -1,0 +1,30 @@
+---
+- connection: local
+  hosts: 127.0.0.1
+  tasks:
+  - name: Developer | Install homebrew
+    command: ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)" creates=/usr/local/bin/brew
+
+  - name: Developer | Update homebrew
+    command: brew update
+
+  - name: Developer | Install curl
+    homebrew: name=curl state=present
+
+  - name: Developer | Install rvm
+    command: "curl -fsSL https://get.rvm.io"
+
+  - name: Developer | Install packages
+    homebrew: name={{ item }} state=present
+    with_items:
+      - gnu-sed
+      - git
+      - the_silver_searcher
+      - redis
+      - pow
+
+  - name: Developer | Pow | Installs launchd agent to start on login
+    command: pow --install-local
+
+  - name: Developer | Link real sed
+    file: src=/usr/local/bin/gsed dest=/usr/local/bin/sed state=link
