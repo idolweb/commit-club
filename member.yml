@@ -21,10 +21,6 @@
       - git
       - the_silver_searcher
       - redis
-      - pow
-
-  - name: Developer | Pow | Installs launchd agent to start on login
-    command: pow --install-local
 
   - name: Developer | Link real sed
     file: src=/usr/local/bin/gsed dest=/usr/local/bin/sed state=link
