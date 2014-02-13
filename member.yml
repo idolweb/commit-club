@@ -21,6 +21,14 @@
       - git
       - the_silver_searcher
       - redis
+      - elasticsearch
+      - lftp
+
+  - name: Developer | Install pip packages
+    pip: name=xlsx2csv
+
+  - name: Developer | Install ffmpeg
+    homebrew: name=ffmpeg install_options="with-fdk-aac"
 
   - name: Developer | Link real sed
     file: src=/usr/local/bin/gsed dest=/usr/local/bin/sed state=link
