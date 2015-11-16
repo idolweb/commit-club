@@ -2,33 +2,46 @@
 - connection: local
   hosts: 127.0.0.1
   tasks:
-  - name: Developer | Install homebrew
+  - name: Install homebrew
     command: ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)" creates=/usr/local/bin/brew
 
-  - name: Developer | Update homebrew
-    command: brew update
+  - name: Install curl
+    homebrew: name=curl state=present update_homebrew=yes
 
-  - name: Developer | Install curl
-    homebrew: name=curl state=present
+  - name: Install rvm
+    command: curl -fsSL https://get.rvm.io creates="~/.rvm/bin/rvm"
 
-  - name: Developer | Install rvm
-    command: "curl -fsSL https://get.rvm.io"
-
-  - name: Developer | Install packages
+  - name: Install packages
     homebrew: name={{ item }} state=present
     with_items:
       - gnu-sed
       - git
       - the_silver_searcher
       - redis
+      - postgres
       - elasticsearch
       - lftp
+      - flac
+      - ffmpeg
+      - imagemagick
+      - phash
+      - sox
+      - lame
+      - sqlite
+      - memcached
 
-  - name: Developer | Install pip packages
+  - name: Install pip packages
     pip: name=xlsx2csv
 
-  - name: Developer | Install ffmpeg
+  - name: Install ffmpeg
     homebrew: name=ffmpeg install_options="with-fdk-aac"
 
-  - name: Developer | Link real sed
+  - name: Link real sed
     file: src=/usr/local/bin/gsed dest=/usr/local/bin/sed state=link
+
+  - name: Get pow
+    get_url: url=http://get.pow.cx dest=/tmp/pow.sh
+
+  - name: Install pow
+    shell: sh /tmp/pow.sh creates="~/Library/Application Support/Pow"
+    ignore_errors: yes
